@@ -55,7 +55,7 @@ const TabBar = ({ state, descriptors, navigation }) => {
                 const isFocused = state.index === index;
 
                 const onPress = () => {
-                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                    // Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                     const event = navigation.emit({
                         type: 'tabPress',
                         target: route.key,
