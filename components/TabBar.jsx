@@ -3,25 +3,25 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useLinkBuilder, useTheme } from '@react-navigation/native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useColorScheme } from '../lib/useColorScheme';
+import { colorScheme } from 'nativewind';
+import { NAV_THEME } from '../lib/constants';
 
 const tabStyle = StyleSheet.create({
     container: {
         flexDirection: 'row',
         justifyContent: 'space-around',
         paddingVertical: 20,
-        backgroundColor: '#fff',
         alignItems: 'center',
-    },
-    tab: {
-        backgroundColor: '#fff',
+        paddingHorizontal: 20,
     },
     btn: {
+        flex: 1,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
         columnGap: 20,
         color: 'white',
-        backgroundColor: 'black',
         paddingHorizontal: 20,
         paddingVertical: 10,
         borderRadius: 20,
@@ -31,14 +31,14 @@ const tabStyle = StyleSheet.create({
 
 const TabBar = ({ state, descriptors, navigation }) => {
     const { buildHref } = useLinkBuilder();
-
+    const themeColor = NAV_THEME[colorScheme === "light" ? "light" : "dark"];
     const icons = {
-        index: (props) =><Ionicons name="chatbubble-ellipses-outline" size={24} color="black" {...props} />,
-        notification: (props) => <AntDesign name="notification" size={24} color="black"  {...props} />,
-        events: (props) => <AntDesign name="plus" size={24} color="black" {...props} />,
+        index: (props) =><Ionicons name="chatbubble-ellipses-outline" size={24} color={themeColor.text} {...props} />,
+        notification: (props) => <AntDesign name="notification" size={24} color={themeColor.text}  {...props} />,
+        events: (props) => <AntDesign name="plus" size={24} color={themeColor.background} {...props} />,
     }
     return (
-        <View style={tabStyle.container}>
+        <View style={[tabStyle.container, { backgroundColor: themeColor.background}]}>
             {state.routes.map((route, index) => {
                 const { options } = descriptors[route.key];
                 const label =
@@ -84,12 +84,12 @@ const TabBar = ({ state, descriptors, navigation }) => {
                             testID={options.tabBarButtonTestID}
                             onPress={onPress}
                             onLongPress={onLongPress}
-                            style={tabStyle.btn}
+                            style={[tabStyle.btn, { backgroundColor: themeColor.text }]}
                         >
                             {
-                                icons[route.name] ? icons[route.name]({ color: 'white', size: 25 }) : null
+                                icons[route.name] ? icons[route.name]({ size: 25 }) : null
                             }
-                            <Text style={{ color: 'white', fontSize: 18 }}>
+                            <Text style={[{ fontSize: 18, color: themeColor.background }]}>
                                 {label}
                             </Text>
                         </TouchableOpacity>
@@ -104,10 +104,10 @@ const TabBar = ({ state, descriptors, navigation }) => {
                         testID={options.tabBarButtonTestID}
                         onPress={onPress}
                         onLongPress={onLongPress}
-                        style={tabStyle.tab}
+                        className="flex-1"
                     >
                         {
-                            icons[route.name] ? icons[route.name]({ color:  'black', size: 30 }) : null
+                            icons[route.name] ? icons[route.name]({ size: 30 }) : null
                         }
                     </TouchableOpacity>
                 );

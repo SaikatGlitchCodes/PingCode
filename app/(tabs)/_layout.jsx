@@ -3,8 +3,11 @@ import React from 'react';
 import { StyleSheet, Text } from 'react-native';
 import TabBar from '../../components/TabBar';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { useColorScheme } from '../../lib/useColorScheme';
+import { NAV_THEME } from '../../lib/constants';
 
 const _layout = () => {
+    const themeColor = NAV_THEME[useColorScheme === "light" ? "light" : "dark"];
     return (
         <Tabs 
             tabBar={props=> <TabBar {...props} />}>
@@ -18,9 +21,9 @@ const _layout = () => {
                     headerRightContainerStyle: { 
                         paddingRight: 20 
                     },
-                    headerLeft: ()=> <Text style={{fontSize: 18,}}>PingCode</Text>,
+                    headerLeft: ()=> <Text style={{fontSize: 18, color: themeColor.text}}>PingCode</Text>,
                     headerTitle : () => null,
-                    headerRight: () => <AntDesign name="search1" size={24} color="black" />,
+                    headerRight: () => <AntDesign name="search1" size={24} color={themeColor.text} />,
                 }} 
                 />
             <Tabs.Screen 

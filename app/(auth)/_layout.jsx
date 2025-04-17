@@ -9,14 +9,14 @@ export default function RootLayout() {
                     key="signin"
                     name='sign-in'
                     options={{
-                        headerShown: false,
+                        headerShown : false,
                     }}
                 />
                 <Stack.Screen
                     key="signup"
                     name='sign-up'
                     options={{
-                        headerShown: false,
+                        headerShown : false,
                     }}
                 />
             </Stack>
