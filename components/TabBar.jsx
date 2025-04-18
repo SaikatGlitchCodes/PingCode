@@ -1,11 +1,11 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useLinkBuilder, useTheme } from '@react-navigation/native';
+import { useLinkBuilder } from '@react-navigation/native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { useColorScheme } from '../lib/useColorScheme';
 import { colorScheme } from 'nativewind';
 import { NAV_THEME } from '../lib/constants';
+import { useColorScheme } from '../lib/useColorScheme';
 
 const tabStyle = StyleSheet.create({
     container: {
@@ -31,7 +31,8 @@ const tabStyle = StyleSheet.create({
 
 const TabBar = ({ state, descriptors, navigation }) => {
     const { buildHref } = useLinkBuilder();
-    const themeColor = NAV_THEME[colorScheme === "light" ? "light" : "dark"];
+    const { isDarkColorScheme } = useColorScheme();
+        const themeColor = NAV_THEME[isDarkColorScheme ? "dark" : "light"];
     const icons = {
         index: (props) =><Ionicons name="chatbubble-ellipses-outline" size={24} color={themeColor.text} {...props} />,
         notification: (props) => <AntDesign name="notification" size={24} color={themeColor.text}  {...props} />,

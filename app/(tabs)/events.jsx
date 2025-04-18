@@ -1,14 +1,21 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Platform, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import InterestsSelector from '../../components/InterestsSelector';
 
-const Room = () => {
+const Events = () => {
+
     return (
-        <View>
-            <Text>Room</Text>
-        </View>
+        <SafeAreaView style={{
+            paddingTop: Platform.OS === 'android' ? 10 : 0,
+            padding: 10, flex: 1
+        }}>
+            <View>
+                <InterestsSelector />
+            </View>
+        </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({})
 
-export default Room;
+export default Events;

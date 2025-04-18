@@ -1,11 +1,16 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Platform, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 
 const Notification = () => {
     return (
-        <View>
-            <Text>Notification</Text>
-        </View>
+        <SafeAreaView style={{
+            paddingTop: Platform.OS === 'android' ? 40 : 0,
+            padding: 20, flex: 1
+        }}>
+            <View>
+                <Text>Notification</Text>
+            </View>
+        </SafeAreaView >
     );
 }
 

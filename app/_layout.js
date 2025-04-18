@@ -28,16 +28,20 @@ export {
 
 function AppLayout() {
   const { user } = useAuth();
-  
+
   return (
     <View className='relative flex-1'>
-      <Stack screenOptions={{ headerShown: false, animation: 'fade' }}>
+      <Stack screenOptions={{ headerShown: false, animation: 'slide_from_left' }}>
         {user ? (
-          <Stack.Screen name="(tabs)" />
+          <>
+            <Stack.Screen name="index" />
+            <Stack.Screen name="(tabs)" />
+            <Stack.Screen name="profile" />
+          </>
         ) : (
           <Stack.Screen name="(auth)" />
         )}
-        <Stack.Screen name="+not-found" options={{ presentation: 'modal' }} />
+        {/* <Stack.Screen name="+not-found" options={{ presentation: 'modal' }} /> */}
       </Stack>
     </View>
   );
@@ -46,7 +50,7 @@ function AppLayout() {
 export default function RootLayout() {
   const { colorScheme, setColorScheme, isDarkColorScheme } = useColorScheme();
   const [isColorSchemeLoaded, setIsColorSchemeLoaded] = React.useState(false);
-  
+
   React.useEffect(() => {
     (async () => {
       const theme = await AsyncStorage.getItem('theme');
@@ -75,7 +79,7 @@ export default function RootLayout() {
   if (!isColorSchemeLoaded) {
     return null;
   }
-  
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
