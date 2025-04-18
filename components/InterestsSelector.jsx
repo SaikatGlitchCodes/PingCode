@@ -1,24 +1,9 @@
 import React, { useState, useEffect, memo } from 'react';
 import { Text, TouchableOpacity, View, ScrollView } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useColorScheme } from '../lib/useColorScheme';
 import { NAV_THEME } from '../lib/constants';
-
-const INTERESTS_STORAGE_KEY = '@user_interests';
-
-// Interest categories with their options
-const interestCategories = {
-  'Arts & Culture': ['Music', 'Dance', 'Painting', 'Photography', 'Theatre', 'Poetry / Open Mic'],
-  'Outdoor & Adventure': ['Hiking / Trekking', 'Camping', 'Nature Walks', 'Stargazing', 'Wildlife Tours'],
-  'Health & Wellness': ['Yoga', 'Meditation', 'Fitness Bootcamps', 'Healthy Cooking', 'Mental Health Circles'],
-  'Food & Drink': ['Food Festivals', 'Wine / Beer Tasting', 'Home Chef Events', 'Potluck Meetups', 'Cooking Classes'],
-  'Tech & Learning': ['Hackathons', 'Startup Meetups', 'Coding Bootcamps', 'AI / Web3 Events', 'Workshops & Seminars'],
-  'Gaming & Esports': ['LAN Parties', 'Online Tournaments', 'Game Nights', 'Indie Game Meetups'],
-  'Social & Fun': ['Speed Dating', 'Weekend Brunch Clubs', 'Themed Parties', 'Board Game Nights', 'Movie Nights'],
-  'Community & Social Good': ['Volunteering', 'Fundraisers', 'Environmental Events', 'Animal Welfare'],
-  'Creative & Hobbies': ['DIY / Crafts', 'Writing', 'Calligraphy', 'Origami', 'Gardening'],
-  'Travel & Culture': ['Travel Meetups', 'Cultural Exchanges', 'Language Exchange', 'Couchsurfing-style Hangouts']
-};
+import interestCategories from '../lib/interestEvents';
+import { useAuth } from '../contexts/AuthContext';
 
 // Category tab component with icon
 const CategoryTab = memo(({ category, isActive, onPress, themeMode }) => {
@@ -44,11 +29,9 @@ const CategoryTab = memo(({ category, isActive, onPress, themeMode }) => {
         elevation: isActive ? 5 : 2
       }}
     >
-      {/* <Text style={{ marginRight: 6 }}>{categoryIcons[category]}</Text> */}
       <Text
         style={{
           color: isActive ? colors.activeText : colors.inactiveText,
-          fontWeight: isActive ? '600' : 'normal',
         }}
       >
         {category}
@@ -78,7 +61,6 @@ const InterestItem = memo(({ interest, isSelected, onToggle, themeMode }) => {
       <Text
         style={{
           color: isSelected ? colors.activeText : colors.inactiveText,
-          fontWeight: isSelected ? '500' : 'normal',
         }}
       >
         {interest}
@@ -136,19 +118,19 @@ const ToggleHeader = memo(({ count, isExpanded, onToggle, themeMode }) => {
 
 const InterestsSelector = ({ toggle = true }) => {
   const [activeCategory, setActiveCategory] = useState(Object.keys(interestCategories)[0]);
-  const [selectedInterests, setSelectedInterests] = useState(new Set());
+  const [selectedInterests, setSelectedInterests] = useState([]);
   const [showInterests, setShowInterests] = useState(false);
   const { isDarkColorScheme } = useColorScheme();
   const themeMode = isDarkColorScheme ? "dark" : "light";
+  const { userProfile, updateProfile } = useAuth();
 
   // Load saved interests on mount
   useEffect(() => {
+    console.log('Interests :', userProfile.interests)
     const loadInterests = async () => {
       try {
-        const savedInterests = await AsyncStorage.getItem(INTERESTS_STORAGE_KEY);
-        if (savedInterests) {
-          setSelectedInterests(new Set(JSON.parse(savedInterests)));
-        }
+        setSelectedInterests(new Set(userProfile?.interests || []));
+
       } catch (error) {
         console.error('Failed to load interests:', error);
       }
@@ -170,10 +152,7 @@ const InterestsSelector = ({ toggle = true }) => {
     setSelectedInterests(newSelectedInterests);
 
     try {
-      await AsyncStorage.setItem(
-        INTERESTS_STORAGE_KEY,
-        JSON.stringify(Array.from(newSelectedInterests))
-      );
+      await updateProfile({ interests: Array.from(newSelectedInterests) });
     } catch (error) {
       console.error('Failed to save interests:', error);
     }

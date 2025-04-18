@@ -1,11 +1,11 @@
 import React from 'react';
-import { Image, Text, TouchableOpacity, View } from 'react-native';
+import { Image, Text, TouchableOpacity, View, ActivityIndicator } from 'react-native';
 import { NAV_THEME } from '../lib/constants';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useColorScheme } from '../lib/useColorScheme';
 
-const ProfileImg = ({ name, img, size = 56, onClick }) => {
-    const reStructuredName = name?.split(' ')?.[0].charAt(0) + name?.split(' ')?.[1].charAt(0);
+const ProfileImg = ({ name, img, size = 56, onClick, isLoading }) => {
+    const reStructuredName = name?.split(' ')?.[0]?.charAt(0) + (name?.split(' ')?.[1]?.charAt(0) || '');
     const { isDarkColorScheme } = useColorScheme();
     const themeColor = NAV_THEME[isDarkColorScheme === "light" ? "light" : "dark"];
     
@@ -44,8 +44,13 @@ const ProfileImg = ({ name, img, size = 56, onClick }) => {
                         justifyContent: 'center', 
                         alignItems: 'center',                   
                     }}
+                    disabled={isLoading}
                 >
-                    <AntDesign name="upload" size={iconSize/2} color={themeColor.text} />
+                    {isLoading ? (
+                        <ActivityIndicator size="small" color={themeColor.text} />
+                    ) : (
+                        <AntDesign name="camera" size={iconSize/2} color={themeColor.text} />
+                    )}
                 </TouchableOpacity>
             )}
         </View>

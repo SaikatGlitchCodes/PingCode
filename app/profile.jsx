@@ -1,25 +1,25 @@
-import React, { memo } from 'react';
+import React, { memo, useState, useEffect } from 'react';
 import {
+  ActivityIndicator,
   Alert,
   Platform,
   SafeAreaView,
   Switch,
   Text,
+  TextInput,
   TouchableOpacity,
   View
 } from 'react-native';
 import { router } from 'expo-router';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
-// Contexts and hooks
 import { useAuth } from '../contexts/AuthContext';
 import { useColorScheme } from '../lib/useColorScheme';
 import { NAV_THEME } from '../lib/constants';
 
-// Components
 import ProfileImg from '../components/ProfileImg';
 import InterestsSelector from '../components/InterestsSelector';
-// Header component with back button
+
 const ProfileHeader = memo(({ themeColor }) => (
   <TouchableOpacity className="flex-row items-center gap-x-3 align-center" onPress={() => router.push('(tabs)')} >
     <AntDesign
@@ -31,43 +31,99 @@ const ProfileHeader = memo(({ themeColor }) => (
   </TouchableOpacity>
 ));
 
-// User info section component
-const UserInfoSection = memo(({ themeColor }) => (
-  <View className="items-center justify-center flex-1 gap-y-2">
-    <ProfileImg
-      name="Saikat Samanta"
-      img="https://www.logoai.com/uploads/resources/2023/06/19/fa7fe9edacbfae0e5ad69f061d0153b8.jpeg"
-      size={200}
-      onClick={() => { }}
-    />
-    <Text style={{ color: themeColor.text }} className="text-2xl">
-      Saikat Samanta
-    </Text>
-    <Text style={{ color: themeColor.icon }} className="text-base">
-      Quote you lead your life with, write here
-    </Text>
-  </View>
-));
+const UserInfoSection = memo(({ themeColor, profile, onUpdate, isEditing, setIsEditing }) => {
+  const [displayName, setDisplayName] = useState(profile?.displayName || '');
+  const [bio, setBio] = useState(profile?.bio || '');
+  
+  useEffect(() => {
+    if (profile) {
+      setDisplayName(profile.displayName || '');
+      setBio(profile.bio || '');
+    }
+  }, [profile]);
+  
+  const handleSave = () => {
+    onUpdate({ displayName, bio });
+    setIsEditing(false);
+  };
+  
+  return (
+    <View className="items-center justify-center flex-1 gap-y-2">
+      <ProfileImg
+        name={profile?.displayName || 'User'}
+        img={profile?.photoURL || "https://www.logoai.com/uploads/resources/2023/06/19/fa7fe9edacbfae0e5ad69f061d0153b8.jpeg"}
+        size={200}
+        onClick={() => {}}
+      />
+      
+      {isEditing ? (
+        <>
+          <TextInput
+            value={displayName}
+            onChangeText={setDisplayName}
+            className="w-4/5 p-1 mt-3 text-2xl text-center border-b"
+            style={{ 
+              color: themeColor.text,
+              borderBottomColor: themeColor.border
+            }}
+            placeholder="Display Name"
+            placeholderTextColor={themeColor.icon}
+          />
+          
+          <TextInput
+            value={bio}
+            onChangeText={setBio}
+            className="text-base text-center border-b p-1 mt-1.5 w-4/5"
+            style={{ 
+              color: themeColor.text,
+              borderBottomColor: themeColor.border
+            }}
+            placeholder="Add your bio here..."
+            placeholderTextColor={themeColor.icon}
+            multiline
+          />
+          
+          <TouchableOpacity 
+            onPress={handleSave}
+            className="bg-[#FCC600] py-2 px-5 rounded-full mt-3"
+          >
+            <Text className="font-medium text-black">Save Profile</Text>
+          </TouchableOpacity>
+        </>
+      ) : (
+        <>
+          <Text style={{ color: themeColor.text }} className="text-2xl">
+            {profile?.displayName || 'User'}
+          </Text>
+          <Text style={{ color: themeColor.icon }} className="px-4 text-base text-center">
+            {profile?.bio || "Add your bio here..."}
+          </Text>
+          <TouchableOpacity 
+            onPress={() => setIsEditing(true)}
+            className="flex-row items-center mt-2.5"
+          >
+            <AntDesign name="edit" size={16} color={themeColor.icon} />
+            <Text style={{ color: themeColor.icon }} className="ml-1.5">Edit Profile</Text>
+          </TouchableOpacity>
+        </>
+      )}
+    </View>
+  );
+});
 
-// Theme toggle component
 const ThemeToggle = memo(({ themeColor, isDarkColorScheme, toggleColorScheme }) => {
   const themeMode = isDarkColorScheme ? "dark" : "light";
   const colors = NAV_THEME[themeMode].interest;
+  
   return (
-    <View style={{
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      paddingVertical: 10,
-      paddingHorizontal: 16,
-      borderRadius: 8,
-      backgroundColor: colors.toggleBg,
-      borderWidth: 1,
-      borderColor: colors.toggleBorder,
-      marginBottom: 12,
-      marginTop: 12
-    }}>
-      <Text style={{ color: themeColor.text }} className="text-base">Theme</Text>
+    <View 
+      className="flex-row justify-between items-center py-2.5 px-4 rounded-lg border my-3"
+      style={{
+        backgroundColor: colors.toggleBg,
+        borderColor: colors.toggleBorder,
+      }}
+    >
+      <Text style={{ color: themeColor.text }} className="text-base">Dark theme</Text>
       <Switch
         trackColor={{ false: '#767577', true: 'white' }}
         thumbColor={isDarkColorScheme === "light" ? 'white' : '#f4f3f4'}
@@ -79,11 +135,9 @@ const ThemeToggle = memo(({ themeColor, isDarkColorScheme, toggleColorScheme }) 
   );
 });
 
-// Sign out button component
 const SignOutButton = memo(({ signOut }) => (
   <TouchableOpacity
-    className="py-2 rounded"
-    style={{ borderColor: 'red', borderWidth: 1 }}
+    className="py-2 bg-red-500 border border-red-500 rounded"
     onPress={async () => {
       const result = await signOut();
       if (!result.success) {
@@ -91,40 +145,61 @@ const SignOutButton = memo(({ signOut }) => (
       }
     }}
   >
-    <Text className="text-xl text-center text-red-500">Sign Out</Text>
+    <Text className="text-xl text-center text-white">Sign Out</Text>
   </TouchableOpacity>
 ));
 
 const Profile = () => {
-  const { signOut } = useAuth();
+  const { signOut, userProfile, updateProfile, profileLoading } = useAuth();
   const { isDarkColorScheme, toggleColorScheme } = useColorScheme();
+  const [isEditing, setIsEditing] = useState(false);
   const themeColor = NAV_THEME[isDarkColorScheme ? "dark" : "light"];
+  
+  // Handle profile data updates
+  const handleUpdateProfile = async (profileData) => {
+    try {
+      const result = await updateProfile(profileData);
+      if (!result.success) {
+        Alert.alert('Error', result.error || 'Failed to update profile');
+      }
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      Alert.alert('Error', 'Failed to update profile. Please try again.');
+    }
+  };
 
   return (
-    <SafeAreaView style={{
-      paddingTop: Platform.OS === 'android' ? 40 : 0,
-      padding: 20,
-      flex: 1
-    }}>
+    <SafeAreaView className={`flex-1 p-5 ${Platform.OS === 'android' ? 'pt-10' : ''}`}>
       <View className="flex-1 mt-5">
         <ProfileHeader themeColor={themeColor} />
-        <UserInfoSection themeColor={themeColor} />
+        
+          <>
+            <UserInfoSection 
+              themeColor={themeColor} 
+              profile={userProfile} 
+              onUpdate={handleUpdateProfile}
+              isEditing={isEditing}
+              setIsEditing={setIsEditing}
+            />
 
-        <View className="flex-1 mt-3">
-          <Text style={{ color: themeColor.text }} className="text-xl">Preferences</Text>
+            <View className="flex-1 mt-3">
+              <Text style={{ color: themeColor.text }} className="text-xl">Preferences</Text>
 
-          <ThemeToggle
-            themeColor={themeColor}
-            isDarkColorScheme={isDarkColorScheme}
-            toggleColorScheme={toggleColorScheme}
-          />
-          <View className="py-4">
-            <InterestsSelector toggle={true} />
-          </View>
-
-        </View>
-
-        <SignOutButton signOut={signOut} />
+              <ThemeToggle
+                themeColor={themeColor}
+                isDarkColorScheme={isDarkColorScheme}
+                toggleColorScheme={toggleColorScheme}
+              />
+              
+              <View className="py-4">
+                <InterestsSelector 
+                  toggle={true} 
+                />
+              </View>
+            </View>
+            
+            <SignOutButton signOut={signOut} />
+          </>
       </View>
     </SafeAreaView>
   );
