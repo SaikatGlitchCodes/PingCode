@@ -1,8 +1,8 @@
 import '../global.css';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { DarkTheme, DefaultTheme, Theme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
+import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { Redirect, Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import * as React from 'react';
 import { Platform, View } from 'react-native';
@@ -11,6 +11,7 @@ import { useColorScheme } from '../lib/useColorScheme';
 import { setAndroidNavigationBar } from '../lib/android-navigation-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import SplashScreen from './splashScreen';
+import { AuthProvider, useAuth } from '../contexts/AuthContext';
 
 const LIGHT_THEME = {
   ...DefaultTheme,
@@ -25,10 +26,28 @@ export {
   ErrorBoundary,
 } from 'expo-router';
 
+function AppLayout() {
+  const { user } = useAuth();
+
+  return (
+    <View className='relative flex-1'>
+      <Stack screenOptions={{ headerShown: false, animation: 'slide_from_left' }}>
+        {user ? (
+          <>
+            <Stack.Screen name="index" />
+            <Stack.Screen name="(tabs)" />
+            <Stack.Screen name="profile" />
+          </>
+        ) : (
+          <Stack.Screen name="(auth)" />
+        )}
+        {/* <Stack.Screen name="+not-found" options={{ presentation: 'modal' }} /> */}
+      </Stack>
+    </View>
+  );
+}
 
 export default function RootLayout() {
-  const [isAuthenticated, setIsAuthenticated] = React.useState(true);
-  const [isLoading, setIsLoading] = React.useState(false);
   const { colorScheme, setColorScheme, isDarkColorScheme } = useColorScheme();
   const [isColorSchemeLoaded, setIsColorSchemeLoaded] = React.useState(false);
 
@@ -60,40 +79,14 @@ export default function RootLayout() {
   if (!isColorSchemeLoaded) {
     return null;
   }
-  if (isLoading) {
-    return <SplashScreen />;
-  }
-  return (
 
+  return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
         <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} />
-        <View className='relative flex-1'>
-          <Stack> 
-            { !isAuthenticated ? 
-            <Stack.Screen
-              key="auth"
-              name='(auth)'
-              options={{
-                headerShown: false,
-              }}
-            /> :
-            <Stack.Screen
-              key="tabs"
-              name='(tabs)'
-              options={{
-                headerShown: false,
-              }}
-            />}
-            <Stack.Screen
-              key="not-found"
-              name='+not-found'
-              options={{
-                headerShown: false,
-              }}
-            />
-          </Stack>
-        </View>
+        <AuthProvider>
+          <AppLayout />
+        </AuthProvider>
       </ThemeProvider>
     </GestureHandlerRootView>
   );

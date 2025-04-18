@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "669174843948",
+    "firebase_url": "https://littleninjas18-chat-app-default-rtdb.firebaseio.com",
+    "project_id": "littleninjas18-chat-app",
+    "storage_bucket": "littleninjas18-chat-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:669174843948:android:f2dc44d3b10be520ea5f89",
+        "android_client_info": {
+          "package_name": "com.pingcode.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "669174843948-2qet3j2dppavjjhl10dm91nq2jie6dqm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pingcode.app",
+            "certificate_hash": "eecb2642ccfc81c88abdf466fb68a21ad645baa6"
+          }
+        },
+        {
+          "client_id": "669174843948-84s2p1s7o6rk3pqkhvad8qbe4a4pvda3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMVhY7pBoUKdLcLg-qy7lgRd8_-91eY3s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "669174843948-84s2p1s7o6rk3pqkhvad8qbe4a4pvda3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "669174843948-h66hbho27ujshfqsupuk1n3sboe38j6i.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.pingcode.app"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
