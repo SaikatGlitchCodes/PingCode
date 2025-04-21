@@ -1,9 +1,9 @@
 import React, { memo, useState, useEffect } from 'react';
 import {
-  ActivityIndicator,
   Alert,
   Platform,
   SafeAreaView,
+  ScrollView,
   Switch,
   Text,
   TextInput,
@@ -14,7 +14,7 @@ import { router } from 'expo-router';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
 import { useAuth } from '../contexts/AuthContext';
-import { useColorScheme } from '../lib/useColorScheme';
+import { useColorScheme } from '../contexts/useColorScheme';
 import { NAV_THEME } from '../lib/constants';
 
 import ProfileImg from '../components/ProfileImg';
@@ -34,47 +34,45 @@ const ProfileHeader = memo(({ themeColor }) => (
 const UserInfoSection = memo(({ themeColor, profile, onUpdate, isEditing, setIsEditing }) => {
   const [displayName, setDisplayName] = useState(profile?.displayName || '');
   const [bio, setBio] = useState(profile?.bio || '');
-  
+
   useEffect(() => {
     if (profile) {
       setDisplayName(profile.displayName || '');
       setBio(profile.bio || '');
     }
   }, [profile]);
-  
+
   const handleSave = () => {
     onUpdate({ displayName, bio });
     setIsEditing(false);
   };
-  
+
   return (
-    <View className="items-center justify-center flex-1 gap-y-2">
+    <View className="items-center justify-center flex-1 pt-8 gap-y-2">
       <ProfileImg
-        name={profile?.displayName || 'User'}
-        img={profile?.photoURL || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRgbTsqEThVIEF1BythTK22IIReQ6Q0n_bsmQ&s"}
         size={170}
-        onClick={() => {}}
+        onClick={true}
       />
-      
+
       {isEditing ? (
         <>
           <TextInput
             value={displayName}
             onChangeText={setDisplayName}
             className="w-4/5 p-1 mt-3 text-2xl text-center border-b"
-            style={{ 
+            style={{
               color: themeColor.text,
               borderBottomColor: themeColor.border
             }}
             placeholder="Display Name"
             placeholderTextColor={themeColor.icon}
           />
-          
+
           <TextInput
             value={bio}
             onChangeText={setBio}
             className="text-base text-center border-b p-1 mt-1.5 w-4/5"
-            style={{ 
+            style={{
               color: themeColor.text,
               borderBottomColor: themeColor.border
             }}
@@ -82,8 +80,8 @@ const UserInfoSection = memo(({ themeColor, profile, onUpdate, isEditing, setIsE
             placeholderTextColor={themeColor.icon}
             multiline
           />
-          
-          <TouchableOpacity 
+
+          <TouchableOpacity
             onPress={handleSave}
             className="bg-[#FCC600] py-2 px-5 rounded-full mt-3"
           >
@@ -98,7 +96,7 @@ const UserInfoSection = memo(({ themeColor, profile, onUpdate, isEditing, setIsE
           <Text style={{ color: themeColor.icon }} className="px-4 text-base text-center">
             {profile?.bio || "Add your bio here..."}
           </Text>
-          <TouchableOpacity 
+          <TouchableOpacity
             onPress={() => setIsEditing(true)}
             className="flex-row items-center mt-2.5"
           >
@@ -114,9 +112,9 @@ const UserInfoSection = memo(({ themeColor, profile, onUpdate, isEditing, setIsE
 const ThemeToggle = memo(({ themeColor, isDarkColorScheme, toggleColorScheme }) => {
   const themeMode = isDarkColorScheme ? "dark" : "light";
   const colors = NAV_THEME[themeMode].interest;
-  
+
   return (
-    <View 
+    <View
       className="flex-row justify-between items-center py-2.5 px-4 rounded-lg border my-3"
       style={{
         backgroundColor: colors.toggleBg,
@@ -137,7 +135,7 @@ const ThemeToggle = memo(({ themeColor, isDarkColorScheme, toggleColorScheme }) 
 
 const SignOutButton = memo(({ signOut }) => (
   <TouchableOpacity
-    className="py-2 bg-red-500 border border-red-500 rounded"
+    className="py-3 border border-[#ff1e1e94] rounded-lg"
     onPress={async () => {
       const result = await signOut();
       if (!result.success) {
@@ -145,16 +143,16 @@ const SignOutButton = memo(({ signOut }) => (
       }
     }}
   >
-    <Text className="text-xl text-center text-white">Sign Out</Text>
+    <Text className="text-xl text-center text-red-500">Sign Out</Text>
   </TouchableOpacity>
 ));
 
 const Profile = () => {
-  const { signOut, userProfile, updateProfile, profileLoading } = useAuth();
+  const { signOut, userProfile, updateProfile } = useAuth();
   const { isDarkColorScheme, toggleColorScheme } = useColorScheme();
   const [isEditing, setIsEditing] = useState(false);
   const themeColor = NAV_THEME[isDarkColorScheme ? "dark" : "light"];
-  
+
   // Handle profile data updates
   const handleUpdateProfile = async (profileData) => {
     try {
@@ -170,37 +168,33 @@ const Profile = () => {
 
   return (
     <SafeAreaView className={`flex-1 p-5 ${Platform.OS === 'android' ? 'pt-10' : ''}`}>
-      <View className="flex-1 mt-5">
+      <ScrollView className="flex-1 mt-5" showsVerticalScrollIndicator={false}>
         <ProfileHeader themeColor={themeColor} />
-        
-          <>
-            <UserInfoSection 
-              themeColor={themeColor} 
-              profile={userProfile} 
-              onUpdate={handleUpdateProfile}
-              isEditing={isEditing}
-              setIsEditing={setIsEditing}
+        <UserInfoSection
+          themeColor={themeColor}
+          profile={userProfile}
+          onUpdate={handleUpdateProfile}
+          isEditing={isEditing}
+          setIsEditing={setIsEditing}
+        />
+
+        <View className="flex-1 mt-3">
+          <Text style={{ color: themeColor.text }} className="text-xl">Preferences</Text>
+
+          <ThemeToggle
+            themeColor={themeColor}
+            isDarkColorScheme={isDarkColorScheme}
+            toggleColorScheme={toggleColorScheme}
+          />
+
+          <View className="py-4">
+            <InterestsSelector
+              toggle={true}
             />
-
-            <View className="flex-1 mt-3">
-              <Text style={{ color: themeColor.text }} className="text-xl">Preferences</Text>
-
-              <ThemeToggle
-                themeColor={themeColor}
-                isDarkColorScheme={isDarkColorScheme}
-                toggleColorScheme={toggleColorScheme}
-              />
-              
-              <View className="py-4">
-                <InterestsSelector 
-                  toggle={true} 
-                />
-              </View>
-            </View>
-            
-            <SignOutButton signOut={signOut} />
-          </>
-      </View>
+          </View>
+        </View>
+        <SignOutButton signOut={signOut} />
+      </ScrollView>
     </SafeAreaView>
   );
 };

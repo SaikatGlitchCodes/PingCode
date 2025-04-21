@@ -2,7 +2,7 @@ import firestore from '@react-native-firebase/firestore';
 
 // Collection reference - use proper method chain
 const usersCollection = () => firestore().collection('users');
-
+const usersProfileImage = () => firestore().collection('usersProfileImage');
 /**
  * Get a user profile by ID
  */
@@ -39,7 +39,7 @@ export const updateUserProfile = async (userId, profileData) => {
 export const createInitialProfile = async (userId, email) => {
   const initialProfile = {
     email,
-    displayName: email.split('@')[0], // Default display name from email
+    displayName: email.split('@')[0],
     photoURL: null,
     bio: '',
     interests: [],

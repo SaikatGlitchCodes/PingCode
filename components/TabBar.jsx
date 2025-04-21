@@ -3,9 +3,8 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useLinkBuilder } from '@react-navigation/native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { colorScheme } from 'nativewind';
 import { NAV_THEME } from '../lib/constants';
-import { useColorScheme } from '../lib/useColorScheme';
+import { useColorScheme } from '../contexts/useColorScheme';
 
 const tabStyle = StyleSheet.create({
     container: {
@@ -13,7 +12,7 @@ const tabStyle = StyleSheet.create({
         justifyContent: 'space-around',
         paddingVertical: 20,
         alignItems: 'center',
-        paddingHorizontal: 15,
+        paddingHorizontal: 30,
     },
     btn: {
         flex: 1,
@@ -105,7 +104,7 @@ const TabBar = ({ state, descriptors, navigation }) => {
                         testID={options.tabBarButtonTestID}
                         onPress={onPress}
                         onLongPress={onLongPress}
-                        className="flex-row justify-center py-2 rounded-full w-28"
+                        className="flex-1 py-2 rounded-full "
                     >
                         {
                             icons[route.name] ? icons[route.name]({ size: 30 }) : null
