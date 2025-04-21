@@ -4,7 +4,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { GestureDetector, Gesture, GestureHandlerRootView, Directions } from 'react-native-gesture-handler';
 import TabBar from '../../components/TabBar';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { useColorScheme } from '../../lib/useColorScheme';
+import { useColorScheme } from '../../contexts/useColorScheme';
 import { NAV_THEME } from '../../lib/constants';
 import ProfileImg from '../../components/ProfileImg';
 

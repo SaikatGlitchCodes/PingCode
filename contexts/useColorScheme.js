@@ -1,7 +1,7 @@
 import { useColorScheme as useNativewindColorScheme } from 'nativewind';
 import { useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { setAndroidNavigationBar } from './android-navigation-bar';
+import { setAndroidNavigationBar } from '../lib/android-navigation-bar';
 
 // Key for storing theme preference
 const THEME_STORAGE_KEY = '@theme_preference';

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, memo } from 'react';
 import { Text, TouchableOpacity, View, ScrollView } from 'react-native';
-import { useColorScheme } from '../lib/useColorScheme';
+import { useColorScheme } from '../contexts/useColorScheme';
 import { NAV_THEME } from '../lib/constants';
 import interestCategories from '../lib/interestEvents';
 import { useAuth } from '../contexts/AuthContext';

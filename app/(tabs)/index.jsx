@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text, SafeAreaView, Button, Platform } from 'react-native';
 import Entypo from '@expo/vector-icons/Entypo';
 import { NAV_THEME } from '../../lib/constants';
-import { useColorScheme } from '../../lib/useColorScheme';
+import { useColorScheme } from '../../contexts/useColorScheme';
 
 const Chat = () => {
     const { isDarkColorScheme } = useColorScheme();

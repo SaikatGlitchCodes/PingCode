@@ -14,7 +14,7 @@ import { router } from 'expo-router';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
 import { useAuth } from '../contexts/AuthContext';
-import { useColorScheme } from '../lib/useColorScheme';
+import { useColorScheme } from '../contexts/useColorScheme';
 import { NAV_THEME } from '../lib/constants';
 
 import ProfileImg from '../components/ProfileImg';

@@ -2,7 +2,7 @@ import React from 'react';
 import { Image, Text, TouchableOpacity, View, ActivityIndicator } from 'react-native';
 import { NAV_THEME } from '../lib/constants';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { useColorScheme } from '../lib/useColorScheme';
+import { useColorScheme } from '../contexts/useColorScheme';
 
 const ProfileImg = ({ name, img, size = 56, onClick, isLoading }) => {
     const reStructuredName = name?.split(' ')?.[0]?.charAt(0) + (name?.split(' ')?.[1]?.charAt(0) || '');

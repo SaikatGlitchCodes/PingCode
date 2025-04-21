@@ -7,7 +7,7 @@ import { StatusBar } from 'expo-status-bar';
 import * as React from 'react';
 import { Platform, View } from 'react-native';
 import { NAV_THEME } from '../lib/constants';
-import { useColorScheme } from '../lib/useColorScheme';
+import { useColorScheme } from '../contexts/useColorScheme';
 import { setAndroidNavigationBar } from '../lib/android-navigation-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import SplashScreen from './splashScreen';
