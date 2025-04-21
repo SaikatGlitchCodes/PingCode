@@ -51,8 +51,8 @@ const UserInfoSection = memo(({ themeColor, profile, onUpdate, isEditing, setIsE
     <View className="items-center justify-center flex-1 gap-y-2">
       <ProfileImg
         name={profile?.displayName || 'User'}
-        img={profile?.photoURL || "https://www.logoai.com/uploads/resources/2023/06/19/fa7fe9edacbfae0e5ad69f061d0153b8.jpeg"}
-        size={200}
+        img={profile?.photoURL || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRgbTsqEThVIEF1BythTK22IIReQ6Q0n_bsmQ&s"}
+        size={170}
         onClick={() => {}}
       />
       

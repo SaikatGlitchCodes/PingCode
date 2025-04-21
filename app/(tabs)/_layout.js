@@ -1,6 +1,6 @@
 import { router, Tabs, useNavigation } from 'expo-router';
 import React, { useRef, useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { GestureDetector, Gesture, GestureHandlerRootView, Directions } from 'react-native-gesture-handler';
 import TabBar from '../../components/TabBar';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -64,9 +64,11 @@ const _layout = () => {
                                 headerRightContainerStyle: {
                                     paddingRight: 20
                                 },
-                                headerLeft: () => <Text style={{ fontSize: 18, color: themeColor.text }} onPress={() => {
-                                    router.push('/profile');
-                                }}><ProfileImg name="Saikat Samanta" img="https://www.logoai.com/uploads/resources/2023/06/19/fa7fe9edacbfae0e5ad69f061d0153b8.jpeg" size={50} /></Text>,
+                                headerLeft: () => 
+                                <TouchableOpacity className="flex-row items-center gap-x-3" onPress={() => { router.push('/profile');}}>
+                                    <ProfileImg name="Saikat Samanta" img="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRgbTsqEThVIEF1BythTK22IIReQ6Q0n_bsmQ&s" size={40} />
+                                    <Text style={{ fontSize: 18, color: themeColor.text }}>PingCode</Text> 
+                                </TouchableOpacity>,
                                 headerTitle: () => null,
                                 headerRight: () => <AntDesign name="search1" size={24} color={themeColor.icon} />,
                             }}
