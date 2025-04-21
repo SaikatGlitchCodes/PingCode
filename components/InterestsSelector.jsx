@@ -124,9 +124,7 @@ const InterestsSelector = ({ toggle = true }) => {
   const themeMode = isDarkColorScheme ? "dark" : "light";
   const { userProfile, updateProfile } = useAuth();
 
-  // Load saved interests on mount
   useEffect(() => {
-    console.log('Interests :', userProfile.interests)
     const loadInterests = async () => {
       try {
         setSelectedInterests(new Set(userProfile?.interests || []));
@@ -139,7 +137,6 @@ const InterestsSelector = ({ toggle = true }) => {
     loadInterests();
   }, []);
 
-  // Save interests when they change
   const toggleInterest = async (interest) => {
     const newSelectedInterests = new Set(selectedInterests);
 

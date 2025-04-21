@@ -2,22 +2,18 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CLIENT_ID</key>
-	<string>669174843948-h66hbho27ujshfqsupuk1n3sboe38j6i.apps.googleusercontent.com</string>
-	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.669174843948-h66hbho27ujshfqsupuk1n3sboe38j6i</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDbLKP-tWiwgzXwDEb0z1UnWB1ZHsjk1so</string>
+	<string>AIzaSyD4-uyNF2QXfSGsKpx4UpjRdn9QRmq9Sco</string>
 	<key>GCM_SENDER_ID</key>
-	<string>669174843948</string>
+	<string>646472691853</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.pingcode.app</string>
 	<key>PROJECT_ID</key>
-	<string>littleninjas18-chat-app</string>
+	<string>pingcode-86520</string>
 	<key>STORAGE_BUCKET</key>
-	<string>littleninjas18-chat-app.firebasestorage.app</string>
+	<string>pingcode-86520.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,8 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:669174843948:ios:f784a1cae63f2663ea5f89</string>
-	<key>DATABASE_URL</key>
-	<string>https://littleninjas18-chat-app-default-rtdb.firebaseio.com</string>
+	<string>1:646472691853:ios:b36d1221408192f42932c4</string>
 </dict>
 </plist>

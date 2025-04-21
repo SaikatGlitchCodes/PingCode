@@ -1,46 +1,37 @@
 {
   "project_info": {
-    "project_number": "669174843948",
-    "firebase_url": "https://littleninjas18-chat-app-default-rtdb.firebaseio.com",
-    "project_id": "littleninjas18-chat-app",
-    "storage_bucket": "littleninjas18-chat-app.firebasestorage.app"
+    "project_number": "646472691853",
+    "project_id": "pingcode-86520",
+    "storage_bucket": "pingcode-86520.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:669174843948:android:f2dc44d3b10be520ea5f89",
+        "mobilesdk_app_id": "1:646472691853:android:f1a80edfa1d174932932c4",
         "android_client_info": {
           "package_name": "com.pingcode.app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "669174843948-2qet3j2dppavjjhl10dm91nq2jie6dqm.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.pingcode.app",
-            "certificate_hash": "eecb2642ccfc81c88abdf466fb68a21ad645baa6"
-          }
-        },
-        {
-          "client_id": "669174843948-84s2p1s7o6rk3pqkhvad8qbe4a4pvda3.apps.googleusercontent.com",
+          "client_id": "646472691853-k7a8o1jatn8v83608e933aajjbe5pe75.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAMVhY7pBoUKdLcLg-qy7lgRd8_-91eY3s"
+          "current_key": "AIzaSyB-zhT26sePOir5CLbbWcej73tHxz12QJc"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "669174843948-84s2p1s7o6rk3pqkhvad8qbe4a4pvda3.apps.googleusercontent.com",
+              "client_id": "646472691853-k7a8o1jatn8v83608e933aajjbe5pe75.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "669174843948-h66hbho27ujshfqsupuk1n3sboe38j6i.apps.googleusercontent.com",
+              "client_id": "646472691853-0ljge5quedqrqq3e8ov3duts6usumtq8.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.pingcode.app"
