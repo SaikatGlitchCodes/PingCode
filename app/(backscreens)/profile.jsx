@@ -13,12 +13,12 @@ import {
 import { router } from 'expo-router';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
-import { useAuth } from '../contexts/AuthContext';
-import { useColorScheme } from '../contexts/useColorScheme';
-import { NAV_THEME } from '../lib/constants';
+import { useAuth } from '../../contexts/AuthContext';
+import { useColorScheme } from '../../contexts/useColorScheme';
+import { NAV_THEME } from '../../lib/constants';
 
-import ProfileImg from '../components/ProfileImg';
-import InterestsSelector from '../components/InterestsSelector';
+import ProfileImg from '../../components/ProfileImg';
+import InterestsSelector from '../../components/InterestsSelector';
 
 const ProfileHeader = memo(({ themeColor }) => (
   <TouchableOpacity className="flex-row items-center gap-x-3 align-center" onPress={() => router.push('(tabs)')} >

@@ -11,7 +11,7 @@ import { useColorScheme } from '../contexts/useColorScheme';
 import { setAndroidNavigationBar } from '../lib/android-navigation-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import SplashScreen from './splashScreen';
-import { AuthProvider, useAuth } from '../contexts/AuthContext';
+import { AuthProvider } from '../contexts/AuthContext';
 
 const LIGHT_THEME = {
   ...DefaultTheme,
@@ -27,21 +27,15 @@ export {
 } from 'expo-router';
 
 function AppLayout() {
-  const { user } = useAuth();
-
   return (
     <View className='relative flex-1'>
       <Stack screenOptions={{ headerShown: false, animation: 'slide_from_left' }}>
-        {user ? (
-          <>
-            <Stack.Screen name="index" />
-            <Stack.Screen name="(tabs)" />
-            <Stack.Screen name="profile" />
-          </>
-        ) : (
-          <Stack.Screen name="(auth)" />
-        )}
-        {/* <Stack.Screen name="+not-found" options={{ presentation: 'modal' }} /> */}
+        <Stack.Screen name="index" />
+        <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="profile" />
+        <Stack.Screen name="userSearch" options={{ animation: 'fade_from_bottom'}} />
+        <Stack.Screen name="(auth)" />
+        <Stack.Screen name="+not-found" options={{ presentation: 'modal' }} />
       </Stack>
     </View>
   );
