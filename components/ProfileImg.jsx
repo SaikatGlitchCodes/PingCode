@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Image, Text, TouchableOpacity, View, ActivityIndicator } from 'react-native';
 import { NAV_THEME } from '../lib/constants';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -10,8 +10,14 @@ import * as FileSystem from 'expo-file-system';
 const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/ddxx2tgik/image/upload';
 const CLOUDINARY_UPLOAD_PRESET = 'my_unsigned_preset';
 
-const ProfileImg = ({ size = 56, onClick, isLoading }) => {
-    const { userProfile, updateProfile } = useAuth();
+const ProfileImg = ({ 
+    size = 56, 
+    onClick, 
+    isLoading, 
+    userProfile: externalUserProfile = null, 
+}) => {
+    const { userProfile: authUserProfile, updateProfile } = useAuth();
+    const userProfile = externalUserProfile || authUserProfile;
     const { isDarkColorScheme } = useColorScheme();
     const [profileImg, setProfileImg] = useState(userProfile?.photoURL || null);
     const [localLoading, setLocalLoading] = useState(false);
@@ -80,7 +86,7 @@ const ProfileImg = ({ size = 56, onClick, isLoading }) => {
     const iconPosition = size / 20;
     
     return (
-        <View className="relative" style={{ width: size, height: size }}>
+        <View className="relative" style={{ width: size, height: size, }}>
             <View
                 style={{
                     backgroundColor: themeColor.primary_background,
@@ -95,7 +101,7 @@ const ProfileImg = ({ size = 56, onClick, isLoading }) => {
                         style={{ width: size, height: size, borderRadius: size / 2 }} 
                     /> : 
                     reStructuredName && 
-                        <Text style={{ fontSize: size / 4 }} className="font-bold text-white">
+                        <Text style={{ fontSize: size /2 }} className="font-bold text-white">
                             {reStructuredName}
                         </Text>
                 }

@@ -65,12 +65,12 @@ const _layout = () => {
                                     paddingRight: 20
                                 },
                                 headerLeft: () => 
-                                <TouchableOpacity className="flex-row items-center gap-x-3" onPress={() => { router.push('/profile');}}>
-                                    <ProfileImg size={40} />
+                                <TouchableOpacity className="flex-row items-center gap-x-3" onPress={() => { router.push('/(backscreens)/profile');}}>
+                                    <ProfileImg size={38} />
                                     <Text style={{ fontSize: 18, color: themeColor.text }}>PingCode</Text> 
                                 </TouchableOpacity>,
                                 headerTitle: () => null,
-                                headerRight: () => <AntDesign name="search1" size={24} color={themeColor.icon} />,
+                                headerRight: () => <AntDesign name="search1" size={24} color={themeColor.icon} onPress={()=>{ router.push('/(backscreens)/userSearch') }} />,
                             }}
                         />
                         <Tabs.Screen
