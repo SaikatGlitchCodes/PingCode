@@ -9,10 +9,9 @@ import { useColorScheme } from '../contexts/useColorScheme';
 const tabStyle = StyleSheet.create({
     container: {
         flexDirection: 'row',
-        justifyContent: 'space-around',
         paddingVertical: 20,
         alignItems: 'center',
-        paddingHorizontal: 30,
+        paddingRight: 30,
     },
     btn: {
         flex: 1,
@@ -104,7 +103,7 @@ const TabBar = ({ state, descriptors, navigation }) => {
                         testID={options.tabBarButtonTestID}
                         onPress={onPress}
                         onLongPress={onLongPress}
-                        className="flex-1 py-2 rounded-full "
+                        className="items-center justify-center flex-1 py-2 rounded-full"
                     >
                         {
                             icons[route.name] ? icons[route.name]({ size: 30 }) : null
