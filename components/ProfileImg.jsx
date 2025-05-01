@@ -86,7 +86,7 @@ const ProfileImg = ({
     const iconPosition = size / 20;
     
     return (
-        <View className="relative" style={{ width: size, height: size }}>
+        <View className="relative" style={{ width: size, height: size, }}>
             <View
                 style={{
                     backgroundColor: themeColor.primary_background,

@@ -126,14 +126,14 @@ const Chat = () => {
                     maxWidth: '80%',
                 }}
             >
-                <Text style={{ color: 'black' }}>
+                <Text style={{ color: isCurrentUser ? 'blacka' : themeColor.text }}>
                     {item.text}
                 </Text>
                 <Text style={{
                     fontSize: 10,
                     color: themeColor.icon,
                     alignSelf: 'flex-end',
-                    marginTop: 4
+                    marginTop: 1
                 }}>
                     {new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </Text>

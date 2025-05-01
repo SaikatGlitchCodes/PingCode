@@ -4,25 +4,27 @@ import { useColorScheme } from '../../contexts/useColorScheme';
 import { NAV_THEME } from '../../lib/constants';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { getUserByUuid } from '../../services/searchService';
+import { getUserByDisplayName } from '../../services/searchService';
 import ProfileImg from '../../components/ProfileImg';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { addUserConnection } from '../../services/userService';
+import { useAuth } from '../../contexts/AuthContext';
 
 const UserSearch = () => {
     const { isDarkColorScheme } = useColorScheme();
+    const { user } = useAuth();
     const themeColor = NAV_THEME[isDarkColorScheme ? "dark" : "light"];
     const router = useRouter();
     const inputRef = useRef(null);
     const [searchedUser, setSearchedUser] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const debounceTimeoutRef = useRef(null);
-
+    console.log('USER : ', user.uid)
     useEffect(() => {
         setTimeout(() => {
             inputRef.current?.focus();
         }, 100);
         
-        // Cleanup debounce timeout on unmount
         return () => {
             if (debounceTimeoutRef.current) {
                 clearTimeout(debounceTimeoutRef.current);
@@ -30,7 +32,6 @@ const UserSearch = () => {
         };
     }, []);
     
-    // Debounced search function
     const debouncedSearch = useCallback((query) => {
         if (debounceTimeoutRef.current) {
             clearTimeout(debounceTimeoutRef.current);
@@ -43,13 +44,13 @@ const UserSearch = () => {
         
         debounceTimeoutRef.current = setTimeout(async () => {
             try {
-                const { users } = await getUserByUuid(query.trim());
+                const { users } = await getUserByDisplayName(query.trim());
                 setSearchedUser(users || []);
             } catch (error) {
                 console.error('Search error:', error);
                 setSearchedUser([]);
             }
-        }, 500); // 500ms delay
+        }, 500);
     }, []);
     
     const handleUserSearch = (text) => {
@@ -58,16 +59,10 @@ const UserSearch = () => {
     };
     
     const handleSearchButtonPress = () => {
-        // Clear any pending debounce to execute search immediately
-        if (debounceTimeoutRef.current) {
-            clearTimeout(debounceTimeoutRef.current);
-        }
-        
         if (searchQuery.trim()) {
-            // Execute search immediately
             (async () => {
                 try {
-                    const { users } = await getUserByUuid(searchQuery.trim());
+                    const { users } = await getUserByDisplayName(searchQuery.trim());
                     setSearchedUser(users || []);
                 } catch (error) {
                     console.error('Search error:', error);
@@ -116,13 +111,14 @@ const UserSearch = () => {
                     </Text>
                     <ScrollView className="mt-4" showsVerticalScrollIndicator={false}>
                         {
-                            searchedUser.map((user, index) => (
+                            searchedUser.map((users, index) => (
                                 <TouchableOpacity
                                     key={index}
-                                    onPress={() => {
+                                    onPress={ async () => {
+                                        await addUserConnection(user.uid, users.uuid)
                                         router.push({
                                             pathname: '/chat',
-                                            params: { userId: user.uuid }
+                                            params: { userId: users.uuid }
                                         });
                                     }}
                                     className="flex-row items-center justify-between px-4 py-3 mb-2 rounded-lg gap-x-4 bg--gray-100"
