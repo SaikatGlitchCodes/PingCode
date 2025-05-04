@@ -80,8 +80,8 @@ const Chat = () => {
     return (
         <SafeAreaView style={{ padding: 20, flex: 1 }}>
             <View className="flex-row items-center justify-between ">
-                <Text className="text-xl font-semibold" style={{ color: themeColor.text }}>Chats</Text>
-                <Entypo name="dots-three-horizontal" size={20} color={themeColor.icon} />
+                <Text className="text-xl" style={{ color: themeColor.text }}>Chats</Text>
+                {/* <Entypo name="dots-three-horizontal" size={20} color={themeColor.icon} /> */}
             </View>
             
             {loading ? (
@@ -109,18 +109,18 @@ const Chat = () => {
                                 }}
                                 onPress={() => navigateToChat(chat.userId)}
                             >
-                                <ProfileImg userProfile={chat} size="43" />
+                                <ProfileImg userProfile={chat} size="50" />
                                 <View className="flex-1">
                                     <View className="flex-row items-center justify-between">
                                         <Text 
-                                            className="font-semibold" 
+                                            className="text-lg font-semibold" 
                                             style={{ color: themeColor.text }}
                                         >
                                             {chat.displayName || 'Unknown User'}
                                         </Text>
                                         
                                         {chat.lastMessageTime && (
-                                            <Text className="text-xs" style={{ color: themeColor.text }}>
+                                            <Text className="text-sm" style={{ color: themeColor.text }}>
                                                 {formatTimestamp(chat.lastMessageTime)}
                                             </Text>
                                         )}

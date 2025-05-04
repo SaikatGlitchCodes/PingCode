@@ -55,13 +55,19 @@ export const AuthProvider = ({ children }) => {
 
   const signIn = async (email, password) => {
     try {
-      setLoading(true);
       const result = await auth().signInWithEmailAndPassword(email, password);
       console.log('Sign in successful:', result.user.uid);
       return { success: true };
     } catch (error) {
-      console.error('Sign in error:', error);
-      return { success: false, error: error.message };
+      // Return both the error message and the error code
+      return { 
+        success: false, 
+        error: error.message,
+        errorCode: error.code  // This is missing in your current implementation
+      };
+    } finally {
+      // Don't set loading false here since onAuthStateChanged will handle it
+      // The component will set its own loading state
     }
   };
 

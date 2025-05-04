@@ -1,18 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useLinkBuilder } from '@react-navigation/native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { NAV_THEME } from '../lib/constants';
 import { useColorScheme } from '../contexts/useColorScheme';
+import { BottomSheetContext } from '../app/_layout';
+import ChatBottomSheet from './bottomSheets/chatBottomSheet';
+import ErrorBottomSheet from './bottomSheets/errorBottomSheet';
 
 const tabStyle = StyleSheet.create({
-    container: {
-        flexDirection: 'row',
-        paddingVertical: 20,
-        alignItems: 'center',
-        paddingRight: 30,
-    },
     btn: {
         flex: 1,
         flexDirection: 'row',
@@ -24,20 +21,21 @@ const tabStyle = StyleSheet.create({
         paddingVertical: 10,
         borderRadius: 20,
     },
-})
-
+});
 
 const TabBar = ({ state, descriptors, navigation }) => {
     const { buildHref } = useLinkBuilder();
     const { isDarkColorScheme } = useColorScheme();
-        const themeColor = NAV_THEME[isDarkColorScheme ? "dark" : "light"];
+    const themeColor = NAV_THEME[isDarkColorScheme ? "dark" : "light"];
+    const { openBottomSheet, setCustomSnapPoints } = useContext(BottomSheetContext);
     const icons = {
-        index: (props) =><Ionicons name="chatbubble-ellipses-outline" size={24} color={themeColor.text} {...props} />,
-        notification: (props) => <AntDesign name="notification" size={24} color={themeColor.text}  {...props} />,
+        index: (props) => <Ionicons name="chatbubble-ellipses-outline" size={24} color={themeColor.text} {...props} />,
+        notification: (props) => <AntDesign name="notification" size={24} color={themeColor.text} {...props} />,
         events: (props) => <AntDesign name="plus" size={24} color={themeColor.background} {...props} />,
-    }
+    };
+
     return (
-        <View style={[tabStyle.container, { backgroundColor: themeColor.background}]}>
+        <View className="flex-row items-center py-5 pr-6" style={{ backgroundColor: themeColor.background }}>
             {state.routes.map((route, index) => {
                 const { options } = descriptors[route.key];
                 const label =
@@ -46,15 +44,13 @@ const TabBar = ({ state, descriptors, navigation }) => {
                         : options.title !== undefined
                             ? options.title
                             : route.name;
-        
-          
+
                 if (['_sitemap', '+not-found'].includes(route.name)) {
                     return null;
                 }
                 const isFocused = state.index === index;
 
                 const onPress = () => {
-                    // Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                     const event = navigation.emit({
                         type: 'tabPress',
                         target: route.key,
@@ -66,13 +62,15 @@ const TabBar = ({ state, descriptors, navigation }) => {
                     }
                 };
 
-                const onLongPress = () => {
-                    console.log('long press');
-                    navigation.emit({
-                        type: 'tabLongPress',
-                        target: route.key,
-                    });
+                const onLongPress = (e) => {
+                    onPress();
+                    if(route.name === 'index'){
+                        openBottomSheet(
+                            <ChatBottomSheet/>,setCustomSnapPoints([ '50%'])
+                        );
+                    }                    
                 };
+
                 if (options.btn) {
                     return (
                         <TouchableOpacity
@@ -85,9 +83,7 @@ const TabBar = ({ state, descriptors, navigation }) => {
                             onLongPress={onLongPress}
                             style={[tabStyle.btn, { backgroundColor: themeColor.text }]}
                         >
-                            {
-                                icons[route.name] ? icons[route.name]({ size: 25 }) : null
-                            }
+                            {icons[route.name] ? icons[route.name]({ size: 25 }) : null}
                             <Text style={[{ fontSize: 18, color: themeColor.background }]}>
                                 {label}
                             </Text>
@@ -105,14 +101,12 @@ const TabBar = ({ state, descriptors, navigation }) => {
                         onLongPress={onLongPress}
                         className="items-center justify-center flex-1 py-2 rounded-full"
                     >
-                        {
-                            icons[route.name] ? icons[route.name]({ size: 30 }) : null
-                        }
+                        {icons[route.name] ? icons[route.name]({ size: 30 }) : null}
                     </TouchableOpacity>
                 );
             })}
         </View>
     );
-}
+};
 
 export default TabBar;

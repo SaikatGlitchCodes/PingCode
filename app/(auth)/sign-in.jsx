@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, StyleSheet } from 'react-native';
+import React, { useState, useContext } from 'react';
+import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, StyleSheet, Alert, Keyboard } from 'react-native';
 import { useAuth } from '../../contexts/AuthContext';
-import { Link } from 'expo-router';
+import { Link,  } from 'expo-router';
+import { Feather } from '@expo/vector-icons';
+import { BottomSheetContext } from '../../app/_layout';
+import ErrorBottomSheet from '../../components/bottomSheets/errorBottomSheet';
 
 export default function SignIn() {
   const [email, setEmail] = useState('');
@@ -9,8 +12,25 @@ export default function SignIn() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { signIn } = useAuth();
+  const { openBottomSheet, setCustomSnapPoints } = useContext(BottomSheetContext);
+
+  const getErrorMessage = (errorCode) => {
+    switch(errorCode) {
+      case 'auth/user-not-found':
+        return 'No account exists with this email. Would you like to create an account?';
+      case 'auth/wrong-password':
+        return 'Incorrect password. Please try again or reset your password.';
+      case 'auth/invalid-email':
+        return 'Please enter a valid email address.';
+      case 'auth/too-many-requests':
+        return 'Too many failed login attempts. Please try again later or reset your password.';
+      default:
+        return 'Failed to sign in. Please check your credentials and try again.';
+    }
+  };
 
   const handleSignIn = async () => {
+    Keyboard.dismiss();
     if (!email || !password) {
       setError('Email and password are required');
       return;
@@ -19,19 +39,79 @@ export default function SignIn() {
     setLoading(true);
     setError('');
     
-    const result = await signIn(email, password);
-    
-    if (!result.success) {
-      setError(result.error || 'Failed to sign in');
+    try {
+      const result = await signIn(email, password);
+      
+      // If sign-in was not successful, handle the error
+      if (!result.success) {
+        console.log('Sign in error:', result);  // Log for debugging
+        
+        
+          setCustomSnapPoints(['50%']);
+          
+          // Open the error bottom sheet
+          openBottomSheet(
+            <ErrorBottomSheet 
+              message="No account exists with this email. Would you like to create one?"
+              actionText="Create Account"
+              navigateTo="/(auth)/sign-up"
+            />,
+            0
+          );
+        setLoading(false);  // Make sure to reset loading state for errors
+      }else{
+        
+      }
+      // Note: If sign-in is successful, the loading state will be handled by the auth state listener
+      // We don't need to explicitly set loading to false here
+    } catch (error) {
+      setError('An unexpected error occurred. Please try again.');
       setLoading(false);
     }
+  };
+
+  const handleForgotPassword = () => {
+    if (!email) {
+      setError('Please enter your email address first');
+      return;
+    }
+    
+    // Navigate to password reset or trigger password reset email
+    Alert.alert(
+      'Reset Password',
+      'We will send a password reset link to your email address.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { 
+          text: 'Send Email', 
+          onPress: async () => {
+            try {
+              // This assumes you have a passwordReset function in your auth context
+              // If not, you need to implement it using Firebase
+              // await auth().sendPasswordResetEmail(email);
+              Alert.alert(
+                'Email Sent',
+                'Check your email for password reset instructions'
+              );
+            } catch (error) {
+              setError('Failed to send reset email: ' + error.message);
+            }
+          } 
+        }
+      ]
+    );
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Welcome Back</Text>
       
-      {error ? <Text style={styles.errorText}>{error}</Text> : null}
+      {error ? (
+        <View style={styles.errorContainer}>
+          <Feather name="alert-circle" size={18} color="red" />
+          <Text style={styles.errorText}>{error}</Text>
+        </View>
+      ) : null}
       
       <TextInput
         style={styles.input}
@@ -51,6 +131,13 @@ export default function SignIn() {
       />
       
       <TouchableOpacity 
+        style={styles.forgotPasswordLink}
+        onPress={handleForgotPassword}
+      >
+        <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
+      </TouchableOpacity>
+      
+      <TouchableOpacity 
         style={styles.button}
         onPress={handleSignIn}
         disabled={loading}
@@ -63,7 +150,7 @@ export default function SignIn() {
       </TouchableOpacity>
       
       <View style={styles.footer}>
-        <Text className="text-white">Don't have an account? </Text>
+        <Text style={{color: 'white'}}>Don't have an account? </Text>
         <Link href="/(auth)/sign-up" asChild>
           <TouchableOpacity>
             <Text style={styles.link}>Sign Up</Text>
@@ -119,5 +206,22 @@ const styles = StyleSheet.create({
     color: 'red',
     marginBottom: 10,
     textAlign: 'center',
+  },
+  errorContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 0, 0, 0.1)',
+    padding: 10,
+    borderRadius: 5,
+    marginBottom: 15,
+  },
+  forgotPasswordLink: {
+    alignSelf: 'flex-end',
+    marginBottom: 20,
+  },
+  forgotPasswordText: {
+    color: '#007BFF',
+    fontSize: 14,
   },
 });
