@@ -46,8 +46,18 @@ const SignUp = () => {
 
         setLoading(true);
         try {
+            // Create the account
             await auth().createUserWithEmailAndPassword(email, password);
-            router.replace('/(tabs)');
+            
+            // Redirect to profile instead of tabs
+            router.replace('/profile');
+            
+            // Optional: Show welcome message
+            Alert.alert(
+                'Account Created!',
+                'Welcome to PingCode! Please complete your profile to get started.',
+                [{ text: 'OK' }]
+            );
         } catch (error) {
             Alert.alert('Error', error.message);
         } finally {

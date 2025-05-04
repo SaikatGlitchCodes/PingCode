@@ -4,6 +4,13 @@ import auth from '@react-native-firebase/auth';
 // Collection reference
 const messagesCollection = () => firestore().collection('messages');
 
+// Cache for chat data
+const chatCache = {
+    data: null,
+    timestamp: null,
+    expiryTime: 5 * 60 * 1000, // 5 minutes cache validity
+};
+
 /**
  * Send a new message between users
  */
@@ -91,10 +98,22 @@ export const markMessagesAsRead = async (currentUserId, otherUserId) => {
 /**
  * Get all user chats with profiles and last messages
  * @param {string} userId - Current user ID
+ * @param {boolean} forceRefresh - Whether to force a data refresh
  * @returns {Promise<Object>} - Object containing chat data with profiles and last messages
  */
-export const getUserChatsWithMessages = async (userId) => {
+export const getUserChatsWithMessages = async (userId, forceRefresh = false) => {
     try {
+        // Return cached data if available and not expired
+        const now = Date.now();
+        if (
+            !forceRefresh &&
+            chatCache.data &&
+            chatCache.timestamp &&
+            (now - chatCache.timestamp < chatCache.expiryTime)
+        ) {
+            return chatCache.data;
+        }
+
         // Step 1: Get user connections
         const userDoc = await firestore().collection('users').doc(userId).get();
 
@@ -176,9 +195,22 @@ export const getUserChatsWithMessages = async (userId) => {
             return b.lastMessageTime - a.lastMessageTime;
         });
 
-        return { success: true, chats: validChats };
+        // Cache the result before returning
+        const result = { success: true, chats: validChats };
+        chatCache.data = result;
+        chatCache.timestamp = Date.now();
+
+        return result;
     } catch (error) {
         console.error('Error fetching user chats with messages:', error);
         return { success: false, error: error.message };
     }
+};
+
+/**
+ * Clear the chat cache
+ */
+export const clearChatCache = () => {
+    chatCache.data = null;
+    chatCache.timestamp = null;
 };

@@ -79,9 +79,9 @@ const Chat = () => {
     
     return (
         <SafeAreaView style={{ padding: 20, flex: 1 }}>
-            <View className="flex-row items-center justify-between mb-6">
-                <Text className="text-xl font-semibold" style={{ color: themeColor.text }}>Chats</Text>
-                <Entypo name="dots-three-horizontal" size={20} color={themeColor.icon} />
+            <View className="flex-row items-center justify-between ">
+                <Text className="text-xl" style={{ color: themeColor.text }}>Chats</Text>
+                {/* <Entypo name="dots-three-horizontal" size={20} color={themeColor.icon} /> */}
             </View>
             
             {loading ? (
@@ -101,7 +101,7 @@ const Chat = () => {
                         chatData.map((chat) => (
                             <TouchableOpacity
                                 key={chat.userId}
-                                className="flex-row items-center py-3 mb-4 rounded-2xl"
+                                className="flex-row items-center py-3 mb-4 gap-x-3 rounded-2xl"
                                 style={{
                                     backgroundColor: chat.unreadCount > 0 
                                         ? isDarkColorScheme ? '#1E293B' : '#F0F9FF' 
@@ -109,10 +109,7 @@ const Chat = () => {
                                 }}
                                 onPress={() => navigateToChat(chat.userId)}
                             >
-                                <View className="mr-3 overflow-hidden bg-gray-300 rounded-full w-14 h-14">
-                                    <ProfileImg userProfile={chat} />
-                                </View>
-                                
+                                <ProfileImg userProfile={chat} size="50" />
                                 <View className="flex-1">
                                     <View className="flex-row items-center justify-between">
                                         <Text 
@@ -123,7 +120,7 @@ const Chat = () => {
                                         </Text>
                                         
                                         {chat.lastMessageTime && (
-                                            <Text className="text-xs" style={{ color: themeColor.textSecondary }}>
+                                            <Text className="text-sm" style={{ color: themeColor.text }}>
                                                 {formatTimestamp(chat.lastMessageTime)}
                                             </Text>
                                         )}
@@ -132,9 +129,9 @@ const Chat = () => {
                                     <View className="flex-row items-center justify-between">
                                         <Text 
                                             numberOfLines={1}
-                                            className="flex-1 mr-2 text-sm" 
+                                            className="flex-1 mr-2 text-sm text-white" 
                                             style={{ 
-                                                color: chat.unreadCount > 0 ? themeColor.text : themeColor.textSecondary,
+                                                color: chat.unreadCount > 0 ? themeColor.text : themeColor.text,
                                                 fontWeight: chat.unreadCount > 0 ? 'bold' : 'normal'
                                             }}
                                         >
