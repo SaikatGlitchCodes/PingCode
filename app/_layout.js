@@ -34,8 +34,9 @@ function AppLayout() {
     <Stack screenOptions={{ headerShown: false, animation: 'slide_from_left' }}>
       <Stack.Screen name="index" />
       <Stack.Screen name="(tabs)" />
-      <Stack.Screen name="profile" />
-      <Stack.Screen name="userSearch" options={{ animation: 'fade_from_bottom' }} />
+      <Stack.Screen name="(backscreens)/profile" />
+      <Stack.Screen name="(backscreens)/userSearch" options={{ animation: 'fade_from_bottom', presentation: 'modal' }} />
+      <Stack.Screen name="(backscreens)/eventDetails" options={{ animation: 'fade_from_bottom', }} />
       <Stack.Screen name="(auth)" />
       <Stack.Screen name="+not-found" options={{ presentation: 'modal' }} />
     </Stack>

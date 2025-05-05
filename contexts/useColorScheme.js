@@ -50,8 +50,8 @@ export function useColorScheme() {
   };
   
   return {
-    colorScheme: colorScheme ?? 'dark',
-    isDarkColorScheme: colorScheme === 'dark',
+    colorScheme: colorScheme ?? 'light',
+    isDarkColorScheme: colorScheme === 'light',
     setColorScheme: setAndSaveColorScheme,
     toggleColorScheme,
   };
