@@ -4,6 +4,7 @@ import ProfileImg from './ProfileImg';
 import { getUserProfile } from '../services/userService';
 import { useColorScheme } from '../contexts/useColorScheme';
 import { NAV_THEME } from '../lib/constants';
+import { useRouter } from 'expo-router';
 
 const formatDateTime = (dateTimeStr) => {
   const date = new Date(dateTimeStr);
@@ -27,6 +28,7 @@ const EventCard = ({ event }) => {
     const [creatorProfile, setCreatorProfile] = useState(null);
     const [joinedProfiles, setJoinedProfiles] = useState([]);
     const [loading, setLoading] = useState(true);
+    const router = useRouter();
     const { isDarkColorScheme } = useColorScheme();
     const themeColor = NAV_THEME[isDarkColorScheme ? "dark" : "light"];
     
@@ -52,8 +54,12 @@ const EventCard = ({ event }) => {
     
     return (
         <TouchableOpacity 
-            className="relative w-56 overflow-hidden rounded-lg shadow-lg h-80"
+            className="relative w-56 mr-3 overflow-hidden rounded-lg shadow-lg h-80"
             style={{ backgroundColor: themeColor.card }}
+            onPress={() => { router.push({
+                pathname: '/(backscreens)/eventDetails',
+                params: { eventDetailInfo: JSON.stringify(event.item)}
+            }) }}
         >
             <Image 
                 source={{ uri: event.item.coverImageUrl }}
@@ -70,7 +76,7 @@ const EventCard = ({ event }) => {
                 <Text className="mt-1 text-sm" style={{ color: themeColor.textSecondary }} numberOfLines={2}>
                     {event.item.description}
                 </Text>
-                <Text className="text-xs" style={{ color: themeColor.textSecondary }}>
+                <Text className="my-2 text-xs" style={{ color: themeColor.textSecondary }}>
                     {formatDateTime(event.item.startTime)}
                 </Text> 
                 <View className="flex-row items-center mt-2">

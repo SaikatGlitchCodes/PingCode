@@ -11,9 +11,7 @@ const Events = () => {
     const [events, setEvents] = useState([]);
     const { isDarkColorScheme } = useColorScheme();
     const themeColor = NAV_THEME[isDarkColorScheme ? "dark" : "light"];
-    const router = useRouter();
 
-    // Mock event data - in a real app, fetch this from Firebase
     useEffect(() => {
         const fetchEvents = async () => {
             try {
@@ -22,13 +20,13 @@ const Events = () => {
                     setEvents([
                         {
                             title: "Bonfire Meetup",
-                            description: "Chill night with music & food",
+                            description: "Chill night with music & food at Koramangala Bangalore lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
                             type: "private",
                             uuid: "q8x2d7u3",
                             location: {
                                 latitude: 12.934,
                                 longitude: 77.614,
-                                address: "Koramangala, Bangalore"
+                                address: "Toit Koramangala, Bangalore"
                             },
                             interests: ["music", "outdoors", "bonfire"],
                             tags: ["chill", "friends"],
@@ -98,13 +96,6 @@ const Events = () => {
         fetchEvents();
     }, []);
 
-    const handleEventPress = (event) => {
-        router.push({
-            pathname: '(backscreens)/eventDetails',
-            params: { id: event.item.uuid }
-        });
-    };
-
     return (
         <SafeAreaView style={[styles.container, { backgroundColor: themeColor.background }]}>
             {loading ? (
@@ -114,14 +105,14 @@ const Events = () => {
             ) : (
                 <ScrollView className="flex-1">
                     <View style={styles.content}>
-                        <Text className="mb-3 text-lg">Popular Events</Text>
+                        <View className="flex-row items-center justify-between">
+                            <Text className="mb-3 text-lg">Popular Events</Text>
+                            <TouchableOpacity > <Text>more</Text> </TouchableOpacity>
+                        </View>
+                        
                         <FlatList
                             data={events}
-                            renderItem={(event) => (
-                                <TouchableOpacity className="mr-3" onPress={() => handleEventPress(event)}>
-                                    <EventCard event={event} />
-                                </TouchableOpacity>
-                            )}
+                            renderItem={(event) => <EventCard event={event} />}
                             keyExtractor={item => item.uuid}
                             horizontal
                             showsHorizontalScrollIndicator={false}
@@ -137,11 +128,7 @@ const Events = () => {
                         <Text className="mb-3 text-lg">NearBy Events</Text>
                         <FlatList
                             data={events}
-                            renderItem={(event) => (
-                                <TouchableOpacity className="mr-3" onPress={() => handleEventPress(event)}>
-                                    <EventCard event={event} />
-                                </TouchableOpacity>
-                            )}
+                            renderItem={(event) => <EventCard event={event} />}
                             keyExtractor={item => item.uuid}
                             horizontal
                             showsHorizontalScrollIndicator={false}
@@ -171,8 +158,7 @@ const styles = StyleSheet.create({
     },
     content: {
         flex: 1,
-        paddingLeft: 16,
-        marginBottom: 16,
+        padding: 16,
     },
     sectionTitle: {
         fontSize: 18,
