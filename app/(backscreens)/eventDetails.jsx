@@ -9,11 +9,13 @@ import SimpleLineIcons from '@expo/vector-icons/SimpleLineIcons';
 import MapScreen from '../../components/MapView';
 import { formatDateTime } from '../../services/utilService';
 import JoinedProfiles from '../../components/JoinedProfiles';
+import SwipeButton from 'rn-swipe-button';
 
 const EventDetails = () => {
     const { eventDetailInfo } = useLocalSearchParams();
     const [showFullDescription, setShowFullDescription] = useState(false);
     const { isDarkColorScheme } = useColorScheme();
+    const [favEvent, setFavEvent] = useState(false);
 
     // Memoize expensive operations
     const parsedEventDetail = useMemo(() => {
@@ -47,8 +49,8 @@ const EventDetails = () => {
         return parsedEventDetail?.tags?.map((tag, index) => (
             <Text
                 key={index}
-                className="px-1 py-1 mx-1 text-lg rounded-md"
-                style={{ color: themeColor.text, backgroundColor: themeColor.card }}
+                className="px-4 py-1 text-lg rounded-md shadow-2xl"
+                style={{ color: themeColor.text, backgroundColor: themeColor.border }}
             >
                 {tag}
             </Text>
@@ -72,9 +74,13 @@ const EventDetails = () => {
         );
     }
 
+    const toggleFavEvent=()=>{
+        setFavEvent(!favEvent);
+    }
+    
     return (
         <SafeAreaView className="relative" style={[styles.container, { backgroundColor: themeColor.background }]}>
-            <View className="flex-row items-center justify-between p-4 border-b-[1px] border-gray-200">
+            <View className="flex-row items-center justify-between p-4 border-b-[1px]  z-10" style={{ borderColor: themeColor.border }}>
                 <AntDesign name="arrowleft" size={24} color={themeColor.icon} onPress={handleBack} />
                 <Text
                     style={{ color: themeColor.text }}
@@ -86,15 +92,15 @@ const EventDetails = () => {
                 <AntDesign name="sharealt" size={24} color={themeColor.icon} />
             </View>
 
-            <ScrollView className="flex-1 w-full pt-5">
+            <ScrollView className="z-10 flex-1 w-full pt-5 ">
                 {imageData.length > 0 && <ImageSlider images={imageData} />}
 
                 <View className="flex-row items-center justify-between px-6 mt-4">
-                    <View style={{ backgroundColor: themeColor.card }} className="flex-row items-center justify-between px-5 py-2 rounded-full shadow-2xl gap-x-8">
+                    <View style={{ backgroundColor: themeColor.border }} className="flex-row items-center justify-between px-5 py-2 rounded-full shadow-2xl gap-x-8 ">
                         <Text className="text-lg" style={{ color: themeColor.text }}>
                             {parsedEventDetail?.interestedUsers?.length || 0} are Interested
                         </Text>
-                        <Ionicons name="heart-circle" size={30} color="black" />
+                        <Ionicons onPress={toggleFavEvent} name="heart-circle" size={30} color={favEvent?'red':'black'} />
                     </View>
 
                     <TouchableOpacity style={{ backgroundColor: themeColor.btn }} className="flex-row items-center justify-between py-3 rounded-full shadow-xl px-7">
@@ -108,7 +114,7 @@ const EventDetails = () => {
                     </Text>
 
                     {parsedEventDetail?.tags?.length > 0 && (
-                        <View className="flex-row flex-wrap items-center my-3">
+                        <View className="flex-row flex-wrap items-center my-3 gap-x-3">
                             <AntDesign name="tago" size={22} color={themeColor.icon} />
                             {renderTags}
                         </View>
@@ -128,8 +134,16 @@ const EventDetails = () => {
                             <JoinedProfiles joinedUserIds={parsedEventDetail.joinedUsers} themeColor={themeColor} containerStyle="pl-3" />
                         </View>
                     )}
-                    
-                    <Text className="mt-10 text-lg font-semibold" style={{ color: themeColor.text }}>
+                    {parsedEventDetail?.maxCapacity && (
+                        <View className="flex-row items-center mt-3">
+                            <Entypo name="ticket" size={22} color={themeColor.icon} />
+                            <Text className="pl-3 text-md" style={{ color: themeColor.text }}>
+                                {parsedEventDetail.maxCapacity} tickets left
+                            </Text>
+                        </View>
+                    )}
+
+                    <Text className="mt-6 text-lg font-semibold" style={{ color: themeColor.text }}>
                         About this Event
                     </Text>
 
@@ -173,6 +187,25 @@ const EventDetails = () => {
                     )}
                 </View>
             </ScrollView>
+            <View style={{ borderColor: themeColor.border }} className="absolute border-[30px]  rounded-full h-60 w-60 -right-16 top-1/2 "></View>
+
+            <View className="fixed z-20 w-full px-8 mt-3 bottom-6">
+                <SwipeButton
+                    title="Swipe to Join"
+                    titleColor={ themeColor.text}
+                    titleStyles={{ fontSize: 15 }}
+                    containerStyles={{ margin: 0 }}
+                    onSwipeSuccess={() => { console.log("Hi") }}
+                    railBackgroundColor={themeColor.border}
+                    railBorderColor={themeColor.border}
+                    railFillBorderColor={'#159F6A'}
+                    railFillBackgroundColor={'#159F6A'}
+                    thumbIconBackgroundColor={themeColor.background}
+                    thumbIconBorderColor="white"
+                    thumbIconComponent={
+                        () => <AntDesign name="doubleright" size={24} color={themeColor.icon} />
+                    } />
+            </View>
         </SafeAreaView>
     );
 };
@@ -185,3 +218,13 @@ const styles = StyleSheet.create({
 });
 
 export default React.memo(EventDetails);
+
+
+
+{/* <View style={{ backgroundColor: themeColor.border }} className="h-10 top-[60%] -rotate-12 -left-5 absolute w-[110%] flex-row gap-x-7 items-center justify-center ">
+{
+    parsedEventDetail?.interests.map((info, index)=>{
+        return <Text key={index} className="text-xl text-white">{info}</Text>
+    })
+}
+</View> */}
