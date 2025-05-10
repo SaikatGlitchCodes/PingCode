@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Platform, SafeAreaView, StyleSheet, Text, TouchableOpacity, View, ActivityIndicator, ScrollView } from 'react-native';
+import { Platform, SafeAreaView, StyleSheet, Text, TouchableOpacity, View, ActivityIndicator, ScrollView, TextInput } from 'react-native';
 import { FlatList } from 'react-native';
 import { useRouter } from 'expo-router';
 import EventCard from '../../components/EventCard';
 import { useColorScheme } from '../../contexts/useColorScheme';
 import { NAV_THEME } from '../../lib/constants';
+import { Ionicons } from '@expo/vector-icons';
 
 const Events = () => {
     const [loading, setLoading] = useState(true);
@@ -38,10 +39,11 @@ const Events = () => {
                             startTime: "2025-05-05T18:30:00Z",
                             endTime: "2025-05-06T01:00:00Z",
                             status: "active",
-                            coverImageUrl: "https://compassohio.com/wp-content/uploads/2024/10/Thursday-Bonfire-Blog-no-logo-1024x1024.jpg",
+                            coverImageUrl: "https://www.shutterstock.com/image-vector/bonfire-night-guy-fawkes-vector-600nw-2204130943.jpg",
                             disableScreenshots: true,
                             allowComments: true,
                             allowQRCheckin: true,
+                            interestedUsers: [],
                             joinedUsers: ["8Ojor2GWY6PFRwmySIqTdZN7A0r1", "YuxJZHdWmsXl89Lkc3Z74ZbYUCm1"],
                             paidUsers: ["YuxJZHdWmsXl89Lkc3Z74ZbYUCm1"],
                             photos: [
@@ -103,13 +105,28 @@ const Events = () => {
                     <ActivityIndicator size="large" color={themeColor.primary} />
                 </View>
             ) : (
-                <ScrollView className="flex-1">
-                    <View style={styles.content}>
+                <ScrollView className="flex-1 px-4">
+                    <View className="flex-row items-center px-2 border border-gray-400 rounded-full mb-7">
+                        <Ionicons name="search" size={23} color={themeColor.text} />
+                        <TextInput
+                            placeholder="Music event, standUp"
+                            placeholderTextColor={themeColor.text}
+                            onChangeText={()=>{}}
+                            className="block h-12 px-4 text-base border-none"
+                            style={{
+                                color: themeColor.text,
+                            }}
+                            autoCapitalize="none"
+                            returnKeyType="search"
+                            onSubmitEditing={()=>{}}
+                        />
+                    </View>
+                    <View className="mb-8">
                         <View className="flex-row items-center justify-between">
                             <Text className="mb-3 text-lg">Popular Events</Text>
                             <TouchableOpacity > <Text>more</Text> </TouchableOpacity>
                         </View>
-                        
+
                         <FlatList
                             data={events}
                             renderItem={(event) => <EventCard event={event} />}
@@ -124,7 +141,7 @@ const Events = () => {
                             }
                         />
                     </View>
-                    <View style={styles.content}>
+                    <View className="mb-8">
                         <Text className="mb-3 text-lg">NearBy Events</Text>
                         <FlatList
                             data={events}
@@ -155,10 +172,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-    },
-    content: {
-        flex: 1,
-        padding: 16,
     },
     sectionTitle: {
         fontSize: 18,

@@ -1,56 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, TouchableOpacity, View, Image, Text, ActivityIndicator } from 'react-native';
 import ProfileImg from './ProfileImg';
+import JoinedProfiles from './JoinedProfiles';
 import { getUserProfile } from '../services/userService';
 import { useColorScheme } from '../contexts/useColorScheme';
 import { NAV_THEME } from '../lib/constants';
 import { useRouter } from 'expo-router';
-
-const formatDateTime = (dateTimeStr) => {
-  const date = new Date(dateTimeStr);
-  
-  // Check if the date is valid
-  if (isNaN(date.getTime())) return dateTimeStr;
-  
-  const options = { 
-    weekday: 'short',
-    month: 'short', 
-    day: 'numeric',
-    hour: 'numeric', 
-    minute: '2-digit',
-    hour12: true
-  };
-  
-  return date.toLocaleString('en-US', options);
-};
+import { formatDateTime } from '../services/utilService';
 
 const EventCard = ({ event }) => {
     const [creatorProfile, setCreatorProfile] = useState(null);
-    const [joinedProfiles, setJoinedProfiles] = useState([]);
     const [loading, setLoading] = useState(true);
     const router = useRouter();
     const { isDarkColorScheme } = useColorScheme();
     const themeColor = NAV_THEME[isDarkColorScheme ? "dark" : "light"];
     
     useEffect(() => {
-        const fetchProfiles = async () => {
+        const fetchCreatorProfile = async () => {
             try {
                 const { data } = await getUserProfile(event.item.createdBy);
                 setCreatorProfile(data);
-            
-                const joinedUsers = event.item.joinedUsers.slice(0, 5);
-                const profilePromises = joinedUsers.map((userId) => getUserProfile(userId));
-                const profiles = await Promise.all(profilePromises);
-                setJoinedProfiles(profiles.filter(profile => profile != null));
             } catch (error) {
-                console.error("Error fetching profiles:", error);
+                console.error("Error fetching creator profile:", error);
             } finally {
                 setLoading(false);
             }
         };
         
-        fetchProfiles();
-    }, [event.item.createdBy, event.item.joinedUsers]);
+        fetchCreatorProfile();
+    }, [event.item.createdBy]);
     
     return (
         <TouchableOpacity 
@@ -93,27 +71,12 @@ const EventCard = ({ event }) => {
                         <Text style={{ color: themeColor.textSecondary }}>Unknown creator</Text>
                     )}
                 </View>
-                               
             </View>
-            {!loading && joinedProfiles.length > 0 && (
-                    <View className="absolute mt-3 top-1 left-2">
-                        <View className="flex-row">
-                            {joinedProfiles.map((profile, index) => (
-                                <View key={index} style={{ marginLeft: index > 0 ? -10 : 0, zIndex: 10 - index }}>
-                                    <ProfileImg size={25} userProfile={profile.data} borderWidth={1} borderColor="white" />
-                                </View>
-                            ))}
-                            
-                            {event.item.joinedUsers.length > 5 && (
-                                <View className="justify-center ml-1">
-                                    <Text className="text-xs" style={{ color: themeColor.textSecondary }}>
-                                        +{event.item.joinedUsers.length - 5} more
-                                    </Text>
-                                </View>
-                            )}
-                        </View>
-                    </View>
-                )}
+            
+            <JoinedProfiles 
+                joinedUserIds={event.item.joinedUsers}
+                themeColor={themeColor} 
+            />
         </TouchableOpacity>
     );
 };

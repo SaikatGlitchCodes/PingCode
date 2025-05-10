@@ -28,7 +28,7 @@ const ImageSlider = ({ images }) => {
   }).current;
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} className="shadow-xl">
       <FlatList
         ref={flatListRef}
         data={images}
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '90%',
-    height: 210,
+    height: 250,
     resizeMode: 'cover',
     borderRadius: 15,
   },
