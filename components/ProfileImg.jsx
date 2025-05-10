@@ -15,13 +15,15 @@ const ProfileImg = ({
     onClick, 
     isLoading, 
     userProfile: externalUserProfile = null, 
+    borderWidth,
+    borderColor,
 }) => {
     const { userProfile: authUserProfile, updateProfile } = useAuth();
     const userProfile = externalUserProfile || authUserProfile;
     const { isDarkColorScheme } = useColorScheme();
     const [profileImg, setProfileImg] = useState(userProfile?.photoURL || null);
     const [localLoading, setLocalLoading] = useState(false);
-
+    
     const updateProfileImage = async () => {
         try {
             const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -98,7 +100,7 @@ const ProfileImg = ({
                 {profileImg ? 
                     <Image 
                         source={{ uri: profileImg }} 
-                        style={{ width: size, height: size, borderRadius: size / 2 }} 
+                        style={{ width: size, height: size, borderRadius: size / 2, borderWidth: borderWidth, borderColor: borderColor || 'white' }} 
                     /> : 
                     reStructuredName && 
                         <Text style={{ fontSize: size /2 }} className="font-bold text-white">

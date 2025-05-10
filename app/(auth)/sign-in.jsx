@@ -114,8 +114,9 @@ export default function SignIn() {
       ) : null}
       
       <TextInput
-        style={styles.input}
+        placeholderTextColor={'black'}
         placeholder="Email"
+        style={styles.input}
         value={email}
         onChangeText={setEmail}
         autoCapitalize="none"
@@ -175,7 +176,7 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   input: {
-    color: 'white',
+    color: 'black',
     borderWidth: 1,
     borderColor: '#ddd',
     padding: 10,

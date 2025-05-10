@@ -68,7 +68,10 @@ const TabBar = ({ state, descriptors, navigation }) => {
                         openBottomSheet(
                             <ChatBottomSheet/>,setCustomSnapPoints([ '50%'])
                         );
-                    }                    
+                    } 
+                    if(route.name === 'events'){
+                        navigation.navigate('(backscreens)/createdEvent');
+                    }                   
                 };
 
                 if (options.btn) {
