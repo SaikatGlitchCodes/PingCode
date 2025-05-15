@@ -1,12 +1,9 @@
-import { router, Tabs, useNavigation } from 'expo-router';
-import React, { useRef, useEffect, useState } from 'react';
+import { router, Tabs } from 'expo-router';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { GestureDetector, Gesture, GestureHandlerRootView, Directions } from 'react-native-gesture-handler';
 import TabBar from '../../components/TabBar';
-import AntDesign from '@expo/vector-icons/AntDesign';
+import {AntDesign, MaterialCommunityIcons} from '@expo/vector-icons';
 import { useColorScheme } from '../../contexts/useColorScheme';
 import { NAV_THEME } from '../../lib/constants';
-import ProfileImg from '../../components/ProfileImg';
 
 const _layout = () => {
     const { isDarkColorScheme } = useColorScheme();
@@ -33,7 +30,10 @@ const _layout = () => {
                                 <Text style={{ fontSize: 18, color: themeColor.text }}>PingCode</Text>
                             </TouchableOpacity>,
                         headerTitle: () => null,
-                        headerRight: () => <AntDesign name="search1" size={24} color={themeColor.icon} onPress={() => { router.push('/(backscreens)/userSearch') }} />,
+                        headerRight: () => <View className="flex-row gap-x-4"> 
+                                    <MaterialCommunityIcons name="skull-scan-outline" size={24} color={themeColor.icon} onPress={() => { router.push('/(backscreens)/qrScanner') }} />
+                                    <AntDesign name="search1" size={24} color={themeColor.icon} onPress={() => { router.push('/(backscreens)/userSearch') }} /> 
+                            </View>,
                     }}
                 />
                 <Tabs.Screen
