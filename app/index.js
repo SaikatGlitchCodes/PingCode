@@ -5,5 +5,5 @@ import { useAuth } from '../contexts/AuthContext';
 export default function Index() {
   const { user } = useAuth();
 
-  return user ? <Redirect href="/(tabs)" /> : <Redirect href="/(auth)/sign-in" />;
+  return user ? <Redirect href="/(backscreens)/createdEvent" /> : <Redirect href="/(auth)/sign-in" />;
 }
